@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -38,6 +39,12 @@ public class PlayerController : MonoBehaviour
         PlayerAnimation(horizontal, vertical);
         if (onGround)
             PlayerCrouch();
+
+        if (transform.position.y < -7)
+        {
+            Debug.Log("Game Over!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     private void PlayerMovement(float horizontal, float vertical)
     {
