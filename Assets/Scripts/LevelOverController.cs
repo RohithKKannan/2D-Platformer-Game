@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelOverController : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.GetComponent<PlayerController>() != null)
-            Debug.Log("Level completed!");
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 }
