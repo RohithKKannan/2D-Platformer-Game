@@ -6,6 +6,7 @@ using System;
 public class PlayerController : MonoBehaviour
 {
     public ScoreController scoreController;
+    public HeartController heartController;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private Rigidbody2D rb;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int jumpCount;
     int jumpCountAnim;
     int count;
+    static int hearts = 3;
     void Awake()
     {
         count = 0;
@@ -126,7 +128,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage()
     {
-        Debug.Log("Collided with enemy!");
+        heartController.TakeDamage();
     }
     /*
 void OnTriggerEnter2D(Collider2D collider)
