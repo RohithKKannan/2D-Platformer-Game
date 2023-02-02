@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,8 +15,10 @@ public class PlayerController : MonoBehaviour
     public int NumberOfJumps = 1;
     [SerializeField] int jumpCount;
     int jumpCountAnim;
+    int count;
     void Awake()
     {
+        count = 0;
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();
@@ -28,8 +32,6 @@ public class PlayerController : MonoBehaviour
 
         if (!Input.GetKey(KeyCode.LeftControl))
             horizontal = Input.GetAxisRaw("Horizontal");
-        if (Input.GetKeyDown(KeyCode.Space))
-            vertical = Input.GetAxisRaw("Jump");
 
         onGround = Physics2D.Raycast(transform.position, new Vector2(0, -1), distance, groundLayer);
 
@@ -37,6 +39,12 @@ public class PlayerController : MonoBehaviour
         PlayerAnimation(horizontal, vertical);
         if (onGround)
             PlayerCrouch();
+
+        if (transform.position.y < -7)
+        {
+            Debug.Log("Game Over!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     private void PlayerMovement(float horizontal, float vertical)
     {
@@ -47,11 +55,13 @@ public class PlayerController : MonoBehaviour
         {
             jumpCount = NumberOfJumps;
         }
-        if (vertical > 0 && jumpCount != 0)
+        if (Input.GetKeyDown(KeyCode.W) && jumpCount != 0)
         {
-            // Debug.Log("Jump got pressed " + jumpCount);
+            count++;
+            Debug.Log("Count : " + count);
+            Debug.Log("Jump got pressed " + jumpCount);
             jumpCount = jumpCount - 1;
-            // Debug.Log("Pressed " + jumpCount);
+            Debug.Log("Pressed " + jumpCount);
             Jump();
         }
     }
@@ -96,7 +106,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(horizontal));
         transform.localScale = scale;
 
-        if (vertical > 0 && jumpCountAnim != 0)
+        if (Input.GetKeyDown(KeyCode.W) && jumpCountAnim != 0)
         {
             jumpCountAnim = jumpCountAnim - 1;
             animator.SetTrigger("jump");
@@ -106,6 +116,7 @@ public class PlayerController : MonoBehaviour
         else
             animator.SetBool("crouch", false);
     }
+    /*
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "platform")
@@ -118,11 +129,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log(Vector2.Dot(playerVector, platformVector));
             if (Vector2.Dot(playerVector, platformVector) < 0)
             {
-                collider.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+                collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = false;
             }
             else
             {
-                collider.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+                collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
             }
         }
     }
@@ -131,7 +142,7 @@ public class PlayerController : MonoBehaviour
         if (collider.gameObject.tag == "platform")
         {
             Debug.Log("Trigger exit with platform!");
-            collider.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
         }
     }
     void OnCollisionExit2D(Collision2D collision)
@@ -139,7 +150,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "platform")
         {
             Debug.Log("Collision exit with platform!");
-            collision.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            collision.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
         }
     }
+    */
 }
