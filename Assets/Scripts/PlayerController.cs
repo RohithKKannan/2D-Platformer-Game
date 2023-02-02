@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public ScoreController scoreController;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private Rigidbody2D rb;
@@ -74,7 +75,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 offset = boxCollider2D.offset;
         Vector2 size = boxCollider2D.size;
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.S))
         {
             offset.x = -0.1136989f;
             offset.y = 0.5907992f;
@@ -115,6 +116,11 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("crouch", Input.GetKey(KeyCode.LeftControl));
         else
             animator.SetBool("crouch", false);
+    }
+    public void PickUpKey()
+    {
+        Debug.Log("Pick up Key!");
+        scoreController.IncreaseScore();
     }
     /*
     void OnTriggerEnter2D(Collider2D collider)
