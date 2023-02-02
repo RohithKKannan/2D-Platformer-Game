@@ -1,27 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Animator animator;
-    public BoxCollider2D boxCollider2D;
+    private Animator animator;
+    private BoxCollider2D boxCollider2D;
+    private Rigidbody2D rb;
+    public float speed;
+    public float jumpForce;
+    public LayerMask groundLayer;
+    public bool onGround = false;
+    public float distance;
+    public int NumberOfJumps = 1;
+    [SerializeField] int jumpCount;
+    int jumpCountAnim;
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
+        jumpCount = NumberOfJumps;
+        jumpCountAnim = NumberOfJumps;
+    }
     void Update()
     {
-        float speed = Input.GetAxisRaw("Horizontal");
-        float jump = Input.GetAxisRaw("Vertical");
+        float horizontal = 0;
+        float vertical = 0;
 
-        Vector3 scale = transform.localScale;
-        if (speed < 0)
-            scale.x = -1 * Mathf.Abs(scale.x);
-        else if (speed > 0)
-            scale.x = Mathf.Abs(scale.x);
-        animator.SetFloat("speed", Mathf.Abs(speed));
-        transform.localScale = scale;
+        if (!Input.GetKey(KeyCode.LeftControl))
+            horizontal = Input.GetAxisRaw("Horizontal");
+        if (Input.GetKeyDown(KeyCode.Space))
+            vertical = Input.GetAxisRaw("Jump");
 
-        animator.SetBool("jump", (jump > 0));
-        animator.SetBool("crouch", Input.GetKey(KeyCode.LeftControl));
+        onGround = Physics2D.Raycast(transform.position, new Vector2(0, -1), distance, groundLayer);
 
+        PlayerMovement(horizontal, vertical);
+        PlayerAnimation(horizontal, vertical);
+        if (onGround)
+            PlayerCrouch();
+    }
+    private void PlayerMovement(float horizontal, float vertical)
+    {
+        Vector3 position = transform.position;
+        position.x += horizontal * speed * Time.deltaTime;
+        transform.position = position;
+        if (onGround)
+        {
+            jumpCount = NumberOfJumps;
+        }
+        if (vertical > 0 && jumpCount != 0)
+        {
+            // Debug.Log("Jump got pressed " + jumpCount);
+            jumpCount = jumpCount - 1;
+            // Debug.Log("Pressed " + jumpCount);
+            Jump();
+        }
+    }
+    private void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(new Vector2(0, 1) * jumpForce, ForceMode2D.Impulse);
+    }
+    private void PlayerCrouch()
+    {
         Vector2 offset = boxCollider2D.offset;
         Vector2 size = boxCollider2D.size;
         if (Input.GetKey(KeyCode.LeftControl))
@@ -40,5 +80,66 @@ public class PlayerController : MonoBehaviour
         }
         boxCollider2D.offset = offset;
         boxCollider2D.size = size;
+    }
+    private void PlayerAnimation(float horizontal, float vertical)
+    {
+        if (onGround)
+        {
+            animator.ResetTrigger("jump");
+            jumpCountAnim = NumberOfJumps;
+        }
+        Vector3 scale = transform.localScale;
+        if (horizontal < 0)
+            scale.x = -1 * Mathf.Abs(scale.x);
+        else if (horizontal > 0)
+            scale.x = Mathf.Abs(scale.x);
+        animator.SetFloat("speed", Mathf.Abs(horizontal));
+        transform.localScale = scale;
+
+        if (vertical > 0 && jumpCountAnim != 0)
+        {
+            jumpCountAnim = jumpCountAnim - 1;
+            animator.SetTrigger("jump");
+        }
+        if (onGround)
+            animator.SetBool("crouch", Input.GetKey(KeyCode.LeftControl));
+        else
+            animator.SetBool("crouch", false);
+    }
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "platform")
+        {
+            Debug.Log("Collided with platform!");
+            Vector2 playerVector = rb.velocity;
+            Vector2 platformVector = collider.gameObject.transform.up;
+            Debug.Log(playerVector);
+            Debug.Log(platformVector);
+            Debug.Log(Vector2.Dot(playerVector, platformVector));
+            if (Vector2.Dot(playerVector, platformVector) < 0)
+            {
+                collider.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+            }
+            else
+            {
+                collider.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            }
+        }
+    }
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "platform")
+        {
+            Debug.Log("Trigger exit with platform!");
+            collider.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
+    }
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "platform")
+        {
+            Debug.Log("Collision exit with platform!");
+            collision.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
     }
 }
