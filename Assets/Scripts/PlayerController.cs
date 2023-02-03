@@ -5,6 +5,7 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameOverController gameOverController;
     public ScoreController scoreController;
     public HeartController heartController;
     private Animator animator;

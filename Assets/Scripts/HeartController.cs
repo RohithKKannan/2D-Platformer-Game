@@ -6,7 +6,8 @@ using TMPro;
 
 public class HeartController : MonoBehaviour
 {
-    static int hearts = 3;
+    [SerializeField] GameOverController gameOverController;
+    public static int hearts = 3;
     [SerializeField] private TMP_Text heartText;
     void Awake()
     {
@@ -19,8 +20,7 @@ public class HeartController : MonoBehaviour
         UpdateHearts();
         if (hearts == 0)
         {
-            hearts = 3;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            gameOverController.GameOver();
         }
     }
     void UpdateHearts()
