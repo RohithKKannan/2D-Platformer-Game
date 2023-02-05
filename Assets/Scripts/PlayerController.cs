@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int jumpCount;
     int jumpCountAnim;
     int count;
-    static int hearts = 3;
     void Awake()
     {
         count = 0;

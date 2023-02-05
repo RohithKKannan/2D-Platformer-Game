@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameOverController : MonoBehaviour
 {
     [SerializeField] GameObject gameOver;
+    [SerializeField] GameObject hud;
     [SerializeField] PlayerController player;
     void Start()
     {
@@ -13,6 +14,7 @@ public class GameOverController : MonoBehaviour
     }
     public void GameOver()
     {
+        hud.SetActive(false);
         gameOver.SetActive(true);
         player.GetComponent<PlayerController>().enabled = false;
     }
@@ -23,6 +25,7 @@ public class GameOverController : MonoBehaviour
     }
     public void MainMenu()
     {
+        HeartController.hearts = 3;
         SceneManager.LoadScene(0);
     }
 }

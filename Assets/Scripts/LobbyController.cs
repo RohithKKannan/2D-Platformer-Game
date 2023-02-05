@@ -1,24 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 public class LobbyController : MonoBehaviour
 {
     [SerializeField] GameObject MainMenu;
     [SerializeField] GameObject Options;
+    [SerializeField] GameObject LevelSelection;
     public void StartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        LevelSelection.SetActive(true);
     }
     public void OpenOptions()
     {
-        MainMenu.SetActive(false);
         Options.SetActive(true);
     }
     public void BackToMenu()
     {
-        MainMenu.SetActive(true);
         Options.SetActive(false);
+        LevelSelection.SetActive(false);
     }
     public void QuitGame()
     {
