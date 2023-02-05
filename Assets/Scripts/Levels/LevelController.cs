@@ -6,15 +6,19 @@ using UnityEngine.UI;
 public class LevelController : MonoBehaviour
 {
     private Button LevelSelect;
-    public string Level;
+    public int levelIndex;
     void Awake()
     {
         LevelSelect = GetComponent<Button>();
         LevelSelect.onClick.AddListener(LoadLevel);
+        if (LevelManager.Instance.GetLevelStatus(levelIndex) == LevelStatus.locked)
+            GetComponent<Image>().color = Color.grey;
+        else
+            GetComponent<Image>().color = Color.white;
     }
 
     private void LoadLevel()
     {
-        SceneManager.LoadScene(Level);
+        LevelManager.Instance.LoadLevel(levelIndex);
     }
 }

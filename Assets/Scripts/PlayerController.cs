@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
         Vector3 position = transform.position;
         position.x += horizontal * speed * Time.deltaTime;
         transform.position = position;
+        /*
         if (onGround)
         {
             jumpCount = NumberOfJumps;
@@ -68,11 +69,21 @@ public class PlayerController : MonoBehaviour
             // Debug.Log("Pressed " + jumpCount);
             Jump();
         }
+        */
+        if (onGround)
+        {
+            jumpCount = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.W) && jumpCount < NumberOfJumps)
+        {
+            Jump();
+        }
     }
     private void Jump()
     {
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(new Vector2(0, 1) * jumpForce, ForceMode2D.Impulse);
+        jumpCount = jumpCount + 1;
     }
     private void PlayerCrouch()
     {
@@ -101,6 +112,11 @@ public class PlayerController : MonoBehaviour
         {
             animator.ResetTrigger("jump");
             jumpCountAnim = NumberOfJumps;
+            animator.SetTrigger("isGrounded");
+        }
+        else
+        {
+            animator.ResetTrigger("isGrounded");
         }
         Vector3 scale = transform.localScale;
         if (horizontal < 0)
