@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
     public ScoreController scoreController;
+    public HeartController heartController;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private Rigidbody2D rb;
@@ -17,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int jumpCount;
     int jumpCountAnim;
     int count;
+    static int hearts = 3;
     void Awake()
     {
         count = 0;
@@ -43,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
         if (transform.position.y < -7)
         {
-            Debug.Log("Game Over!");
+            // Debug.Log("Game Over!");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
@@ -59,10 +62,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && jumpCount != 0)
         {
             count++;
-            Debug.Log("Count : " + count);
-            Debug.Log("Jump got pressed " + jumpCount);
+            // Debug.Log("Count : " + count);
+            // Debug.Log("Jump got pressed " + jumpCount);
             jumpCount = jumpCount - 1;
-            Debug.Log("Pressed " + jumpCount);
+            // Debug.Log("Pressed " + jumpCount);
             Jump();
         }
     }
@@ -119,45 +122,50 @@ public class PlayerController : MonoBehaviour
     }
     public void PickUpKey()
     {
-        Debug.Log("Pick up Key!");
+        // Debug.Log("Pick up Key!");
         scoreController.IncreaseScore();
     }
+
+    public void TakeDamage()
+    {
+        heartController.TakeDamage();
+    }
     /*
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.tag == "platform")
-        {
-            Debug.Log("Collided with platform!");
-            Vector2 playerVector = rb.velocity;
-            Vector2 platformVector = collider.gameObject.transform.up;
-            Debug.Log(playerVector);
-            Debug.Log(platformVector);
-            Debug.Log(Vector2.Dot(playerVector, platformVector));
-            if (Vector2.Dot(playerVector, platformVector) < 0)
-            {
-                collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = false;
-            }
-            else
-            {
-                collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
-            }
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (collider.gameObject.tag == "platform")
-        {
-            Debug.Log("Trigger exit with platform!");
-            collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
-        }
-    }
-    void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "platform")
-        {
-            Debug.Log("Collision exit with platform!");
-            collision.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
-        }
-    }
-    */
+void OnTriggerEnter2D(Collider2D collider)
+{
+   if (collider.gameObject.tag == "platform")
+   {
+       Debug.Log("Collided with platform!");
+       Vector2 playerVector = rb.velocity;
+       Vector2 platformVector = collider.gameObject.transform.up;
+       Debug.Log(playerVector);
+       Debug.Log(platformVector);
+       Debug.Log(Vector2.Dot(playerVector, platformVector));
+       if (Vector2.Dot(playerVector, platformVector) < 0)
+       {
+           collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = false;
+       }
+       else
+       {
+           collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
+       }
+   }
+}
+void OnTriggerExit2D(Collider2D collider)
+{
+   if (collider.gameObject.tag == "platform")
+   {
+       Debug.Log("Trigger exit with platform!");
+       collider.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
+   }
+}
+void OnCollisionExit2D(Collision2D collision)
+{
+   if (collision.gameObject.tag == "platform")
+   {
+       Debug.Log("Collision exit with platform!");
+       collision.gameObject.GetComponent<TilemapCollider2D>().isTrigger = true;
+   }
+}
+*/
 }

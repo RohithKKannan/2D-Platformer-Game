@@ -6,7 +6,7 @@ using TMPro;
 public class ScoreController : MonoBehaviour
 {
     private int score;
-    private TMP_Text scoreText;
+    [SerializeField] private TMP_Text scoreText;
     void Awake()
     {
         scoreText = GetComponent<TMP_Text>();
