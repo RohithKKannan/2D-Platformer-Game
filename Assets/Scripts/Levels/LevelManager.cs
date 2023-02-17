@@ -74,6 +74,7 @@ public class LevelManager : MonoBehaviour
     }
     public void LoadNextLevel()
     {
+        AudioManager.Instance.PlaySound(SoundType.BGMusic);
         int index = SceneManager.GetActiveScene().buildIndex + 1;
         LoadLevel(index);
     }

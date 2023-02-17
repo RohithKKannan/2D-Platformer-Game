@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
     public void PlaySound(SoundType soundType)
     {
         Sound sound = Array.Find(sounds, item => item.soundType == soundType);
-        if (soundType == SoundType.BGMusic || soundType == SoundType.GameOver)
+        if (soundType == SoundType.BGMusic || soundType == SoundType.GameOver || soundType == SoundType.FinishLevel)
         {
             music.clip = sound.audioClip;
             music.Play();
@@ -59,5 +59,5 @@ public class Sound
 }
 public enum SoundType
 {
-    ButtonClick, BGMusic, GameOver, Footstep, Jump
+    ButtonClick, BGMusic, GameOver, Footstep, Jump, Key, FinishLevel
 }

@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
     public void PickUpKey()
     {
         // Debug.Log("Pick up Key!");
+        AudioManager.Instance.PlaySound(SoundType.Key);
         scoreController.IncreaseScore();
     }
 
