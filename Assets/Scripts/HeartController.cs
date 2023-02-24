@@ -11,8 +11,8 @@ public class HeartController : MonoBehaviour
     [SerializeField] private TMP_Text heartText;
     void Awake()
     {
-        UpdateHearts();
         heartText = GetComponent<TMP_Text>();
+        UpdateHearts();
     }
     public void TakeDamage()
     {
