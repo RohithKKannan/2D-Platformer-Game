@@ -5,6 +5,7 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameOverController gameOverController;
     public ScoreController scoreController;
     public HeartController heartController;
     private Animator animator;
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
         float horizontal = 0;
         float vertical = 0;
 
-        if (!Input.GetKey(KeyCode.LeftControl))
+        if (!Input.GetKey(KeyCode.S))
             horizontal = Input.GetAxisRaw("Horizontal");
 
         onGround = Physics2D.Raycast(transform.position, new Vector2(0, -1), distance, groundLayer);
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("jump");
         }
         if (onGround)
-            animator.SetBool("crouch", Input.GetKey(KeyCode.LeftControl));
+            animator.SetBool("crouch", Input.GetKey(KeyCode.S));
         else
             animator.SetBool("crouch", false);
     }
