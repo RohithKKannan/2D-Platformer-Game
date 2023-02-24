@@ -27,6 +27,7 @@ public class LevelManager : MonoBehaviour
     {
         if (GetLevelStatus(1) == LevelStatus.locked)
             SetLevelStatus(1, LevelStatus.unlocked);
+        AudioManager.Instance.PlaySound(SoundType.BGMusic);
     }
 
     public void SetLevelComplete()
@@ -62,15 +63,18 @@ public class LevelManager : MonoBehaviour
                 Debug.Log("The level is locked!");
                 break;
             case LevelStatus.unlocked:
+                AudioManager.Instance.PlaySound(SoundType.ButtonClick);
                 SceneManager.LoadScene(index);
                 break;
             case LevelStatus.completed:
+                AudioManager.Instance.PlaySound(SoundType.ButtonClick);
                 SceneManager.LoadScene(index);
                 break;
         }
     }
     public void LoadNextLevel()
     {
+        AudioManager.Instance.PlaySound(SoundType.BGMusic);
         int index = SceneManager.GetActiveScene().buildIndex + 1;
         LoadLevel(index);
     }

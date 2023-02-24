@@ -19,10 +19,8 @@ public class PlayerController : MonoBehaviour
     public int NumberOfJumps = 1;
     [SerializeField] int jumpCount;
     int jumpCountAnim;
-    int count;
     void Awake()
     {
-        count = 0;
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();
@@ -78,6 +76,14 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
+    }
+    public void FootStepSound()
+    {
+        AudioManager.Instance.PlaySound(SoundType.Footstep);
+    }
+    public void JumpSound()
+    {
+        AudioManager.Instance.PlaySound(SoundType.Jump);
     }
     private void Jump()
     {
@@ -139,6 +145,7 @@ public class PlayerController : MonoBehaviour
     public void PickUpKey()
     {
         // Debug.Log("Pick up Key!");
+        AudioManager.Instance.PlaySound(SoundType.Key);
         scoreController.IncreaseScore();
     }
 
