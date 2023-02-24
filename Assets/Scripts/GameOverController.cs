@@ -28,4 +28,8 @@ public class GameOverController : MonoBehaviour
         HeartController.hearts = 3;
         SceneManager.LoadScene(0);
     }
+    public void NextLevel()
+    {
+        LevelManager.Instance.LoadNextLevel();
+    }
 }
